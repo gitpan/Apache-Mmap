@@ -1,0 +1,13 @@
+Tue Aug 26 01:20:28 1997  Fletch  <lemur1@mindspring.com>
+
+0.03  Wed Aug 27 14:34:42 EDT 1997
+	- Actual First public release. :)  
+	- Added a SIGBUS handler to test scripts.  
+	- Added README.  Expanded documentation in Mmap.pm.
+
+0.02  Tue Aug 26 01:20:45 EDT 1997
+	- First public release.
+
+0.01  Sat Aug 23 02:41:11 1997
+	- original version; created by h2xs 1.18
+

@@ -1,0 +1,48 @@
+Apache::Mmap Version 0.03
+-------------------------
+
+Updated: 08/27/97
+
+This is a Perl5 extension interface to the mmap(2) system call.  A
+file can be mapped into memory and then read from (or written to)
+via a scalar.  More complete documentation is in Mmap.pm (You can
+read it with 'perldoc Mmap.pm').
+ 
+To build the extension, unpack this distribution, create the Makefile
+using 'perl Makefile.PL' and do a 'make'.  As this is alpha software,
+you should probably also do a 'make test' before trying to 'make
+install'.  A message about not being able to bootstrap Apache::Constants
+outside httpd is normal.
+
+The module was developed with perl 5.004_01, and the example
+Apache::Mmap::handler was tested with:
+
+Server version Apache/1.2.1 mod_perl/1.00.
+
+The "t" directory contains two test scripts: 'tie.t' which tests just
+the XSUB TIESCALAR methods, and 'mmap.t' which checks the mmap/munmap
+methods.  The "eg" directory contains two sample benchmark scripts:
+'bench.pl' which uses LWP::UserAgent to retrieve files from a
+mod_perl'd apache, and 'bench2.pl' which compares reading from a
+mapped scalar vs. reading a file with open|while(<FILE>).
+
+The module is known to work (or seems to work :) on at least:
+
+* Linux 2.0.30 
+* Solaris 2.5.1
+
+It should work on other UNIXish platforms which support the mmap(2)
+system call.  If you get it to work on another version, please let
+me know.
+
+Please send any bug reports, queries, large wads of unmarked bills,
+etc. to the author.  The latest version should be available from
+my web page URL<http://www.mindspring.com/~lemur1/> or from a CPAN
+mirror near you.
+
+--
+Fletch                |"Like a great blue salmon of justice, the   __`'/|
+lemur1@mindspring.com | mighty TICK courses upstream to the very   \ o.O' 
+770 209-8037(w)       | spawning ground of evil!" -- The Tick      =(___)=
+                      |                                               U
+ 

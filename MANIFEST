@@ -1,0 +1,13 @@
+README
+MANIFEST
+Changes
+Makefile.PL
+Mmap.pm
+Mmap.xs
+typemap
+t/tie.t
+t/mmap.t
+eg/bench.pl
+eg/bench2.pl
+Artistic
+Copying
