@@ -1,7 +1,7 @@
-Apache::Mmap Version 0.03
+Apache::Mmap Version 0.04
 -------------------------
 
-Updated: 08/27/97
+Updated: 08/29/97
 
 This is a Perl5 extension interface to the mmap(2) system call.  A
 file can be mapped into memory and then read from (or written to)
@@ -26,6 +26,13 @@ methods.  The "eg" directory contains two sample benchmark scripts:
 mod_perl'd apache, and 'bench2.pl' which compares reading from a
 mapped scalar vs. reading a file with open|while(<FILE>).
 
+A prelimiary version of a package implementing the TIEHANDLE methods
+using a mmap'd file (Apache::Mmap::Handle) is also included.  It's
+currently written entirely in perl and does a lot of copying of data
+around memory.  On my Linux box it's about an order of magnitude
+slower than using the tied scalar.  It currently works read-only
+(e.g. you can't tie a handle for writing).
+
 The module is known to work (or seems to work :) on at least:
 
 * Linux 2.0.30 
@@ -40,9 +47,10 @@ etc. to the author.  The latest version should be available from
 my web page URL<http://www.mindspring.com/~lemur1/> or from a CPAN
 mirror near you.
 
+$Id: README,v 1.1 1997/08/29 04:05:21 fletch Exp fletch $
+
 --
 Fletch                |"Like a great blue salmon of justice, the   __`'/|
 lemur1@mindspring.com | mighty TICK courses upstream to the very   \ o.O' 
 770 209-8037(w)       | spawning ground of evil!" -- The Tick      =(___)=
                       |                                               U
- 

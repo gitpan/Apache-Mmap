@@ -17,7 +17,7 @@
  */
 
 /* 
- * $Id: Mmap.xs,v 1.1 1997/08/26 05:16:07 fletch Exp fletch $
+ * $Id: Mmap.xs,v 1.2 1997/08/29 04:05:04 fletch Exp fletch $
  */
 #ifdef __cplusplus
 extern "C" {

@@ -3,7 +3,7 @@
 ##
 ## Copyright (c) 1997
 ## Mike Fletcher <lemur1@mindspring.com>
-## 08/26/97
+## 08/28/97
 ##
 ## THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED 
 ## WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
@@ -13,10 +13,12 @@
 ##
 
 ##
-## $Id: Mmap.pm,v 1.2 1997/08/27 18:14:04 fletch Exp fletch $
+## $Id: Mmap.pm,v 1.3 1997/08/29 04:02:05 fletch Exp fletch $
 ##
 
 package Apache::Mmap;
+
+require 5.004;
 
 use strict;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK 
@@ -39,7 +41,7 @@ sub unmap ($);
 		MAP_ANON MAP_ANONYMOUS MAP_FILE MAP_PRIVATE MAP_SHARED
 		PROT_EXEC PROT_NONE PROT_READ PROT_WRITE);
 
-$VERSION = '0.03';
+$VERSION = '0.04';
 $Apache::Mmap::DEBUG = 0;
 
 my %_Mapped;			# Hash of mapped scalars
@@ -98,19 +100,6 @@ sub munmap ($) {
   return 1;	    
 }
 
-sub handler {
-  use Apache::Constants qw(OK);
-
-  my $r = shift;
-
-  $r->log_error( "Apache::Mmap handling '" . $r->filename . "'\n" );
-
-  $r->send_http_header();
-  $r->print( ${Apache::Mmap::mmap( $r->filename() )} );
-
-  return OK;
-}
-
 sub _do_map ($$) {
   my $file = shift;
   my $opts = shift;
@@ -160,6 +149,20 @@ bootstrap Apache::Mmap $VERSION;
 
 1;
 __END__
+	  
+## handler -- mod_perl request handler
+sub handler {
+  use Apache::Constants qw(OK);
+
+  my $r = shift;
+
+  $r->log_error( "Apache::Mmap handling '" . $r->filename . "'\n" );
+
+  $r->send_http_header();
+  $r->print( ${Apache::Mmap::mmap( $r->filename() )} );
+
+  return OK;
+}
 
 =head1 NAME
 
@@ -279,6 +282,6 @@ Beattie's I<Mmap-alpha2> module.
 
 =head1 SEE ALSO
 
-mmap(2), perl(1), Malcolm Beattie's I<Mmap> module.
+mmap(2), perltie(1), perl(1), Malcolm Beattie's I<Mmap> module.
 
 =cut
