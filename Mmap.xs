@@ -17,7 +17,7 @@
  */
 
 /* 
- * $Id: Mmap.xs,v 1.2 1997/08/29 04:05:04 fletch Exp fletch $
+ * $Id: Mmap.xs,v 1.3 1997/09/15 06:20:56 fletch Exp $
  */
 #ifdef __cplusplus
 extern "C" {
@@ -282,4 +282,3 @@ DESTROY( self )
     Safefree( self );
     XSRETURN_YES;
   }
-

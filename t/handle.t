@@ -8,6 +8,8 @@
 use Carp;
 use Fcntl qw(O_WRONLY O_CREAT O_TRUNC);
 
+use Apache::Mmap qw( :DEFAULT );
+
 ## Black magic from h2xs's test.pl
 BEGIN { $| = 1; print "1..2\n"; }
 END { print "not ok 1\n" unless $loaded; }
@@ -29,7 +31,7 @@ print FOO "ok 2\n";
 close FOO;
 
 ## Open and tie FOO to $tmp read-only
-tie *FOO, 'Apache::Mmap::Handle', $tmp, 'r';
+tie *FOO, 'Apache::Mmap', $tmp, 'r';
 print <FOO>;
 close *FOO;
 

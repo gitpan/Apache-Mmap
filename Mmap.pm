@@ -13,7 +13,7 @@
 ##
 
 ##
-## $Id: Mmap.pm,v 1.3 1997/08/29 04:02:05 fletch Exp fletch $
+## $Id: Mmap.pm,v 1.6 1997/11/25 04:15:39 fletch Exp $
 ##
 
 package Apache::Mmap;
@@ -26,23 +26,32 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK
 
 use Carp qw(:DEFAULT);
 use Symbol qw(:DEFAULT);
+
 ##use Mmap qw(:DEFAULT);
 use FileHandle qw(:DEFAULT);
 
+require AutoLoader;
 require DynaLoader;
 require Exporter;
 
 sub mmap ($;$);
 sub unmap ($);
 
-@ISA = qw(Exporter DynaLoader);
+@ISA = qw(Exporter DynaLoader AutoLoader);
 @EXPORT = qw( );
 @EXPORT_OK = qw(mmap munmap
 		MAP_ANON MAP_ANONYMOUS MAP_FILE MAP_PRIVATE MAP_SHARED
 		PROT_EXEC PROT_NONE PROT_READ PROT_WRITE);
 
-$VERSION = '0.04';
+$VERSION = '0.05';
 $Apache::Mmap::DEBUG = 0;
+
+## Evil magic per DOUGM: Allows tie *FOO, 'Apache::Mmap', ... to work
+## and still get to the correct destructors, etc.
+eval {
+  use Apache::Mmap::Handle qw( TIEHANDLE );
+  *Apache::Mmap::TIEHANDLE = \&Apache::Mmap::Handle::TIEHANDLE;
+};
 
 my %_Mapped;			# Hash of mapped scalars
 
@@ -256,6 +265,21 @@ replacing I</mmaped.html> as apropriate.  Your performance may vary.
 See the benchmarking scripts in the C<eg> directory of the
 distribution.
 
+=head1 Warning Mapping with Offsets
+
+Some platforms (Solaris for example) require files to be mapped on
+memory page boundaries.  If you map with an offset, the offset must be
+on a page boundary (e.g. with 4k pages, if you wanted to map with an
+offset of 6k into the file, you would need to map starting at an
+offset of 4k and look 2k in from the beginning of the mapped region
+(I hope that made sense)).
+
+A future version will provide access to the C<getpagesize()> system
+call on platforms where it is available (SYSV and 4.4BSD).  You may
+also look into the C<Sys::Sysconf> module which provides access to
+C<_SC> macros from system header files for use with C<POSIX::sysconf>.
+Some platforms (again, Solaris) provide an C<_SC_PAGESIZE> constant.
+
 =head1 TODO
 
 Keep track of the mode a file was mapped as for caching purposes.
@@ -264,11 +288,19 @@ Warn if a different mode is specified, or remap as requested?
 Implement some sort of locking (flock, SysV semaphores, . . .) on
 the mapped area.
 
-Add support for the msync(2) and mlock(2) system calls.  
+Add support for the msync(2) and mlock(2) system calls.
+
+Add support for madvise(2) on platforms supporting it.
+
+Add hook to getpagesize(2) for platforms which require mappings at
+offsets to be on page boundaries.
 
 Add some way of specifying if the file's size should be truncated
 to the length of the last scalar inserted on unmapping.  Likewise
 figure out a good way to extend the file/mapped region if needed.
+
+Look into using the Storable module for sharing hashes and arrays
+(like IPC::Shareable module does for shm).
 
 Make sure things work on more architectures/os's than Sparc/Solaris
 2.5.1 and i586/Linux 2.0.30.

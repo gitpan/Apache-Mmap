@@ -10,7 +10,7 @@
 ##
 
 ##
-## $Id: bench3.pl,v 1.1 1997/08/29 04:08:38 fletch Exp fletch $
+## $Id: bench3.pl,v 1.1 1997/08/29 04:08:38 fletch Exp $
 ##
 
 use strict;

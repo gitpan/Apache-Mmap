@@ -1,3 +1,6 @@
+##
+## $Id: typemap,v 1.1 1997/09/09 03:30:02 fletch Exp $
+##
 TYPEMAP
 Mmap*	O_OBJECT
 size_t	T_IV

@@ -13,7 +13,7 @@
 ##
 
 ##
-## $Id: Handle.pm,v 1.2 1997/08/29 04:03:15 fletch Exp fletch $
+## $Id: Handle.pm,v 1.4 1997/11/25 04:15:37 fletch Exp $
 ##
 
 package Apache::Mmap::Handle;
@@ -31,12 +31,13 @@ require AutoLoader;
 require Exporter;
 
 @ISA = qw(Exporter DynaLoader);
-@EXPORT = qw( );
-@EXPORT_OK = qw(mmap munmap
-		MAP_ANON MAP_ANONYMOUS MAP_FILE MAP_PRIVATE MAP_SHARED
-		PROT_EXEC PROT_NONE PROT_READ PROT_WRITE);
+@EXPORT = qw( TIEHANDLE );
+@EXPORT_OK = qw( MAP_ANON MAP_ANONYMOUS MAP_FILE MAP_PRIVATE MAP_SHARED
+		 PROT_EXEC PROT_NONE PROT_READ PROT_WRITE );
 
 $VERSION = $Apache::Mmap::VERSION;
+
+sub TIEHANDLE ($$;$);
 
 1;
 
@@ -44,7 +45,10 @@ __END__
 
 ## TIEHANDLE -- Tie a HANDLE to a mmaped file
 sub TIEHANDLE ($$;$) {
-  my $class = shift;
+  ## UGLY!!! Throw away passed in class. Allows tie *FOO, 'Apache::Mmap', ...
+  ## but (?possibly?) bad for inheritance.  Should be better way . . .
+  shift;			
+  my $class = 'Apache::Mmap::Handle';
   my $file = shift;
   my $opts = shift || 'r';
 
@@ -58,7 +62,7 @@ sub TIEHANDLE ($$;$) {
     return undef;
   }
 
-  $retval->{ '_mapped' } = mmap $file, $opts;
+  $retval->{ '_mapped' } = Apache::Mmap::mmap( $file, $opts );
   $retval->{ '_pos' } = 0;
   $retval->{ '_len' } = length( ${$retval->{'_mapped'}} );
 #  $retval->{ '_val' } = ${$retval->{'_mapped'}} if $opts eq 'r';

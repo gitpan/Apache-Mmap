@@ -13,7 +13,7 @@
 ##
 
 ##
-## $Id: Makefile.PL,v 1.1 1997/08/29 04:07:08 fletch Exp fletch $
+## $Id: Makefile.PL,v 1.2 1997/09/09 06:15:55 fletch Exp $
 ##
 
 use ExtUtils::MakeMaker;
@@ -22,12 +22,11 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
 	      'NAME'	=> 'Apache::Mmap',
 	      'VERSION_FROM' => 'Mmap.pm', # finds $VERSION
-	      'PM' => {
-		       'Mmap.pm' => '$(INST_LIBDIR)/Mmap.pm',
-		       'Handle.pm' => '$(INST_LIBDIR)/Mmap/Handle.pm',
-		      },
-	      'dist' => {
-			 'COMPRESS' => 'gzip -9f', 
-			 'SUFFIX' => 'gz',
-			},
-	     );
+	      PM => {
+		     'Mmap.pm' => '$(INST_LIBDIR)/Mmap.pm',
+		     'Handle.pm' => '$(INST_LIBDIR)/Mmap/Handle.pm',
+		    },
+	      'dist'    => {
+			    COMPRESS=> 'gzip -9f', SUFFIX=>'gz',
+			   },
+);
